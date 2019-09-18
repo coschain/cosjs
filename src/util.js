@@ -1,5 +1,5 @@
 import crc32 from 'crc/crc32'
-const bigInt = require('big-integer')
+const bigInt = require('big-integer');
 
 export const bytes2BigEndUint32 = function (byteArray) {
   return (byteArray[3] | byteArray[2] << 8 | byteArray[1] << 16 | byteArray[0] << 24) >>> 0;
