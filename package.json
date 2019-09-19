@@ -1,5 +1,5 @@
 {
-  "name": "cosjs",
+  "name": "@coschain/cosjs",
   "version": "1.0.0",
   "description": "a js sdk to interact with coschain for human beings",
   "main": "./lib/index.js",
