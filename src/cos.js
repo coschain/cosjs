@@ -12,19 +12,7 @@ class Cos {
   wallet: Wallet;
   constructor(chain:string, provider:string){
     const chainId = new sdk.raw_type.chain_id();
-    switch (chain) {
-      case 'development':
-        chainId.setChainEnv('main');
-        break;
-      case 'testing':
-        chainId.setChainEnv('test');
-        break;
-      case 'production':
-        chainId.setChainEnv('test');
-        break;
-      default:
-        chainId.setChainEnv('main');
-    }
+    chainId.setChainEnv(chain);
     this.chainId = chainId;
     this.provider = provider;
     if (typeof window === 'undefined') {

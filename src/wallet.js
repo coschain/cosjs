@@ -189,7 +189,6 @@ class Wallet {
     sendAmount.setValue(value.toString());
     top.setAmount(sendAmount);
     top.setMemo(memo);
-    console.log(top)
 
     const signTx = await this.signOps(sender, [top]);
     return this.broadcast(signTx);
