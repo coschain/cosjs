@@ -23,7 +23,8 @@ cos.wallet.addAccount("alice", "herPrivKey");
 
 ## About
 
-it is a wrapper for `cos-grpc-js`.
+It is a wrapper for `cos-grpc-js`.
+The module is designed for Node.js and browser.
 
 ## Wallet Apis
 
