@@ -6,11 +6,12 @@ const env = process.env.NODE_ENV;   // eslint-disable-line
 const filename = 'cosjs';      // eslint-disable-line
 const library = 'Cos';          // eslint-disable-line
 const config = {                    // eslint-disable-line
+  target: 'node',
   entry: [
     './src/index.js',
   ],
   module: {
-    rules:  [
+    rules: [
       {
         test: /\.js$/,
         loaders: ['babel-loader'],
@@ -25,13 +26,13 @@ const config = {                    // eslint-disable-line
   devtool: 'cheap-module-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: filename + '.js',       // eslint-disable-line
+    filename: filename + '.node.js',       // eslint-disable-line
     library: library,                 // eslint-disable-line
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },
   plugins: [
-    new webpack.BannerPlugin({ banner: ' /* eslint-disable */ ', raw: true, entryOnly: true }),
+    new webpack.BannerPlugin({banner: ' /* eslint-disable */ ', raw: true, entryOnly: true}),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),

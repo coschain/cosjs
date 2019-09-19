@@ -2,11 +2,15 @@
   "name": "cosjs",
   "version": "1.0.0",
   "description": "a js sdk to interact with coschain for human beings",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "browser": "./dist/cosjs.js",
   "scripts": {
     "test": "test",
     "flow": "flow",
-    "build": "webpack --config webpack.config.js"
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --copy-files",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack --config webpack.config.js --mode production",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack --config webpack.config.js --mode production"
   },
   "repository": {
     "type": "git",
@@ -28,8 +32,11 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-flow": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^6.0.0",
     "flow-bin": "^0.107.0",
     "json-loader": "^0.5.7",
+    "mocha": "^6.2.0",
     "terser-webpack-plugin": "^2.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.40.2",

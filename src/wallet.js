@@ -23,7 +23,7 @@ class Wallet {
   addAccount(name: string, privateKey: string) {
     const priv = crypto.privKeyFromWIF(privateKey);
     if (priv === null) {
-      throw new Error("Parse private key from wif");
+      throw new Error("Parse private key failed from wif");
     }
     this.accounts[name] = priv;
   }
@@ -51,7 +51,7 @@ class Wallet {
   }
 
   async signOps(account: string, ops: operation[]) {
-    const privKey = this.accounts.get(account);
+    const privKey = this.accounts[account];
     if (!privKey) {
       throw new Error("Unknown account " + account);
     }
@@ -154,6 +154,28 @@ class Wallet {
     )
   }
 
+  async createAccount(creator: string, newAccount: string, pubkey: string) {
+    const pub = crypto.pubKeyFromWIF(pubkey);
+    if (pub == null) {
+      throw new Error("Parse public key failed from wif\"");
+    }
+    const pubkeyType = new raw_type.public_key_type();
+    pubkeyType.setData(pub.data);
+    const acop = new operation.account_create_operation();
+    const c = new raw_type.coin();
+    c.setValue(constant.MinCreateAccountFee);
+    acop.setFee(c);
+    const creatorType = new raw_type.account_name();
+    creatorType.setValue(creator);
+    acop.setCreator(creatorType);
+    const an = new raw_type.account_name();
+    an.setValue(newAccount);
+    acop.setNewAccountName(an);
+    acop.setPubKey(pubkeyType);
+    const signTx = await this.signOps(creator, [acop]);
+    return this.broadcast(signTx);
+  }
+
   async transfer(sender: string, receiver: string, amount: string, memo: string) {
     let value = util.parseIntoNumber(amount);
     const top = new operation.transfer_operation();
@@ -167,6 +189,7 @@ class Wallet {
     sendAmount.setValue(value.toString());
     top.setAmount(sendAmount);
     top.setMemo(memo);
+    console.log(top)
 
     const signTx = await this.signOps(sender, [top]);
     return this.broadcast(signTx);
@@ -304,4 +327,4 @@ class Wallet {
 
 }
 
-module.exports = Wallet;
+export default Wallet;
