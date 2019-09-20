@@ -11,13 +11,16 @@ npm i @coschain/cosjs --save
 ## Usage
 
 ```js
-const Cos = require('cosjs').default;
-const cos = new Cos("main", "https://testnode.contento.io");
-cos.wallet.addAccount("alice", "herPrivKey");
+const Cos = require('@coschain/cosjs').default;
+
+let cos = new Cos("test", "https://testnode.contentos.io");
+
+cos.wallet.addAccount("initminer", "4DjYx2KAGh1NP3dai7MZTLUBMMhMBPmwouKE8jhVSESywccpVZ");
+
 
 (async() => {
-  let result = await cos.wallet.transfer("alice", "bob", "10.000000", "memo");
-  console.log(result)
+    let result = await cos.wallet.transfer("initminer", "contentos", "1.000000", "memo");
+    console.log(result);
 })();
 ```
 
