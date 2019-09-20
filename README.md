@@ -42,6 +42,6 @@ The module is designed for Node.js and browser.
 * cosToStake(account: string, amount: string, toAccount: string)
 * stakeToCos(account: string, amount: string, toAccount: string)
 * post(sender: string, title: string, content: string, tagsStr: string)
-* contractCall(caller, owner, contract, method, args, payment)
+* contractCall(caller: string, owner: string, contract: string, method: string, args: string, payment: string)
 * voteToBlockProducer(voterValue: string, bpValue: string, cancel: boolean)
 
