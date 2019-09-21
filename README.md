@@ -10,19 +10,55 @@ npm i @coschain/cosjs --save
 
 ## Usage
 
+### Example: transfer
+
 ```js
 const Cos = require('@coschain/cosjs').default;
 
 let cos = new Cos("test", "https://testnode.contentos.io");
 
-cos.wallet.addAccount("initminer", "4DjYx2KAGh1NP3dai7MZTLUBMMhMBPmwouKE8jhVSESywccpVZ");
+cos.wallet.addAccount("alice", "herPrivKey");
 
 
 (async() => {
-    let result = await cos.wallet.transfer("initminer", "contentos", "1.000000", "memo");
+    let result = await cos.wallet.transfer("alice", "bob", "1.000000", "memo");
     console.log(result);
 })();
 ```
+
+### Example: contract call
+
+I have deployed a simple hello contract on testnode. The contract [source](https://github.com/coschain/wasm-compiler/blob/master/contracts/hello/hello.cpp)
+
+
+```js
+const Cos = require('@coschain/cosjs').default;
+
+let cos = new Cos("test", "https://testnode.contentos.io");
+
+cos.wallet.addAccount("alice", "herPrivKey");
+
+
+(async() => {
+  let result = await cos.wallet.contractCall("alice", "initminer", "hello", "greet", "[]", "0.000000");
+  console.log(result.invoice);
+})();
+```
+
+#### tips
+
+1. When tried to call a method of contract, the contract creator should be known.
+2. Args is a string, actually a stringify json. Like `"[\"COC\", \"COC\", 10000000, 3]"`
+3. Deploying and calling a contract is stamina-bound operation. You can stake some cos to acquire more stamina before calling a contract.
+
+**For stake cos**
+
+```js
+(async() => {
+  await cos.wallet.cosToStake("initminer", "1.000000", "initminer");
+})();
+```
+
 
 ## About
 
