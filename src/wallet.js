@@ -324,6 +324,32 @@ class Wallet {
     return this.broadcast(signTx)
   }
 
+  // this.$route.params.owner, this.$route.params.cName, tName, field, lowerBound, limit, this.isReverse)
+  async queryTable(owner: string, contract: string, table: string, field: string, begin: string, limit: number, reverse: boolean) {
+    let getTableContentRequest = new grpc.GetTableContentRequest();
+    getTableContentRequest.setOwner(owner);
+    getTableContentRequest.setContract(contract);
+    getTableContentRequest.setTable(table);
+    getTableContentRequest.setField(field);
+    getTableContentRequest.setBegin(begin);
+    getTableContentRequest.setCount(limit);
+    getTableContentRequest.setReverse(reverse);
+    return new Promise(resolve =>
+      this.cos.grpc.unary(ApiService.QueryTableContent, {
+        request: getTableContentRequest,
+        host: this.cos.provider,
+        onEnd: res => {
+          const {status, statusMessage, headers, message, trailers} = res;
+          if (status === this.cos.grpc.Code.OK && message) {
+            let object = message.toObject();
+            resolve(object);
+          } else {
+            resolve({msg: statusMessage});
+          }
+        }
+      })
+    )
+  }
 }
 
 export default Wallet;
