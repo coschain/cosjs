@@ -47,9 +47,9 @@ cos.wallet.addAccount("alice", "herPrivKey");
 
 #### tips
 
-1. When tried to call a method of contract, the contract creator should be known.
-2. Args is a string, actually a stringify json. Like `"[\"COC\", \"COC\", 10000000, 3]"`
-3. Deploying and calling a contract is stamina-bound operation. You can stake some cos to acquire more stamina before calling a contract.
+1. When trying to call a method of contract, the contract's creator should be known.
+2. The parameter *args* is a stringify json. Just like `"[\"COC\", \"COC\", 10000000, 3]"`.
+3. Deploying or calling a contract is a stamina-bound operation. You can stake some cos to acquire more stamina before calling a contract.
 
 **For stake cos**
 
