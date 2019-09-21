@@ -59,6 +59,18 @@ cos.wallet.addAccount("alice", "herPrivKey");
 })();
 ```
 
+### Example: query table
+
+```js
+const Cos = require('@coschain/cosjs').default;
+
+let cos = new Cos("test", "https://testnode.contentos.io");
+
+(async () => {
+  let result = await cos.wallet.queryTable("liuxingfeiyu", "kryptontest", "arenas", "creator", '', 30, false);
+  console.log(result);
+})();
+```
 
 ## About
 
@@ -80,4 +92,4 @@ The module is designed for Node.js and browser.
 * post(sender: string, title: string, content: string, tagsStr: string)
 * contractCall(caller: string, owner: string, contract: string, method: string, args: string, payment: string)
 * voteToBlockProducer(voterValue: string, bpValue: string, cancel: boolean)
-
+* queryTable(owner: string, contract: string, table: string, field: string, begin: string, limit: number, reverse: boolean)
