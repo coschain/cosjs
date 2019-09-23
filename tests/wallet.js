@@ -1,12 +1,9 @@
-// import Cos from '../src/cos'
-const Cos = require("../lib/index").default
+const Cos = require("../lib/index")
 
 let cos = new Cos("test", "https://testnode.contentos.io");
 
-cos.wallet.addAccount("initminer", "4DjYx2KAGh1NP3dai7MZTLUBMMhMBPmwouKE8jhVSESywccpVZ");
-
 
 (async () => {
-  let result = await cos.wallet.queryTable("liuxingfeiyu", "kryptontest", "arenas", "creator", '', 30, false);
+  let result = await cos.wallet.accountInfo("initminer");
   console.log(result);
 })();

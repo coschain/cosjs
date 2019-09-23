@@ -13,7 +13,7 @@ npm i @coschain/cosjs --save
 ### Example: transfer
 
 ```js
-const Cos = require('@coschain/cosjs').default;
+const Cos = require('@coschain/cosjs');
 
 let cos = new Cos("test", "https://testnode.contentos.io");
 
@@ -32,7 +32,7 @@ I have deployed a simple hello contract on testnode. The contract [source](https
 
 
 ```js
-const Cos = require('@coschain/cosjs').default;
+const Cos = require('@coschain/cosjs');
 
 let cos = new Cos("test", "https://testnode.contentos.io");
 
@@ -62,7 +62,7 @@ cos.wallet.addAccount("alice", "herPrivKey");
 ### Example: query table
 
 ```js
-const Cos = require('@coschain/cosjs').default;
+const Cos = require('@coschain/cosjs');
 
 let cos = new Cos("test", "https://testnode.contentos.io");
 

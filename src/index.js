@@ -1,3 +1,3 @@
-import Cos from './cos'
+const Cos = require('./cos').default;
 
-export default Cos;
+module.exports = Cos;
