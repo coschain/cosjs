@@ -8,6 +8,20 @@ A js sdk to interact with coschain for human beings.
 npm i @coschain/cosjs --save
 ```
 
+## In browser:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@coschain/cosjs@1.2.1/dist/cosjs.min.js"></script>
+<script>
+    let cos = new Cos("test", "https://testnode.contentos.io");
+
+    (async () => {
+      let result = await cos.wallet.accountInfo("initminer");
+      console.log(result);
+    })();
+</script>
+```
+
 ## Usage
 
 ### Example: transfer
