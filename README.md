@@ -94,9 +94,10 @@ The module is designed for Node.js and browser.
 ## Wallet Apis
 
 * addAccount(name: string, privateKey: string)
-* accountInfo(name: string)
-* bpInfo(bp: string)
-* blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse)
+* accountInfo(name: string, raw: ?boolean) 
+* bpInfo(bp: string, raw: ?boolean)
+* chainInfo(raw: ?boolean) 
+* blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse, raw: ?boolean) 
 * createAccount(creator: string, newAccount: string, pubkey: string)
 * transfer(sender: string, receiver: string, amount: string, memo: string)
 * cosToVest(account: string, amount: string)

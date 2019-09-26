@@ -89,7 +89,7 @@ class Wallet {
     )
   }
 
-  async accountInfo(name: string) {
+  async accountInfo(name: string, raw: ?boolean) {
     let getAccountByNameRequest = new grpc.GetAccountByNameRequest();
     let accountName = new raw_type.account_name();
     accountName.setValue(name);
@@ -101,9 +101,13 @@ class Wallet {
         onEnd: res => {
           const { status, statusMessage, headers, message, trailers } = res;
           if (status === this.cos.grpc.Code.OK && message) {
-            let object = message.toObject();
-            object.info.publicKey = message.getInfo().getPublicKey().toWIF();
-            resolve(object);
+            if (raw) {
+              resolve(message)
+            } else {
+              let object = message.toObject();
+              object.info.publicKey = message.getInfo().getPublicKey().toWIF();
+              resolve(object);
+            }
           } else {
             resolve({msg: statusMessage});
           }
@@ -112,7 +116,7 @@ class Wallet {
     )
   }
 
-  async bpInfo(bp: string) {
+  async bpInfo(bp: string, raw: ?boolean) {
     let getBpByNameRequest = new grpc.GetBlockProducerByNameRequest();
     let accountName = new raw_type.account_name();
     accountName.setValue(bp);
@@ -124,7 +128,11 @@ class Wallet {
         onEnd: res => {
           const { status, statusMessage, headers, message, trailers } = res;
           if (status === this.cos.grpc.Code.OK && message) {
-            resolve(message);
+            if (raw) {
+              resolve(message);
+            } else {
+              resolve(message.toObject());
+            }
           } else {
             resolve({msg: statusMessage});
           }
@@ -133,7 +141,30 @@ class Wallet {
     )
   }
 
-  async blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse) {
+  async chainInfo(raw: ?boolean) {
+    const nonParamsRequest = new grpc.NonParamsRequest();
+    return new Promise(resolve =>
+      this.cos.grpc.unary(ApiService.GetChainState, {
+        request: nonParamsRequest,
+        host: this.cos.provider,
+        onEnd: res => {
+          const {status, statusMessage, headers, message, trailers} = res;
+          if (status === this.cos.grpc.Code.OK && message) {
+            if (raw) {
+              resolve(message)
+            } else {
+              const chainState = message.toObject();
+              resolve(chainState);
+            }
+          } else {
+            resolve({msg: statusMessage});
+          }
+        }
+      })
+    );
+  }
+
+  async blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse, raw: ?boolean) {
     const blockProducerRequest = new grpc.GetBlockProducerListByVoteCountRequest;
     blockProducerRequest.setLimit(limit);
     blockProducerRequest.setStart(start);
@@ -145,7 +176,11 @@ class Wallet {
         onEnd: res => {
           const { status, statusMessage, headers, message, trailers } = res;
           if (status === this.cos.grpc.Code.OK && message) {
-            resolve(message)
+            if (raw) {
+              resolve(message)
+            } else {
+              resolve(message.toObject())
+            }
           } else {
             resolve({msg: statusMessage});
           }
@@ -194,6 +229,19 @@ class Wallet {
     return this.broadcast(signTx);
   }
 
+  async accountUpdate(owner: string, newPubKey: string) {
+    const aop = new operation.account_update_operation()
+    const accountType = new raw_type.account_name()
+    accountType.setValue(owner)
+    const pubkey = new raw_type.public_key_type()
+    const pub = crypto.pubKeyFromWIF(newPubKey)
+    pubkey.setData(pub.data)
+    aop.setOwner(accountType)
+    aop.setPubKey(pubkey)
+    const signTx = await this.signOps(owner, [aop])
+    return this.broadcast(signTx)
+  }
+
   async cosToVest(account: string, amount: string) {
     let value = util.parseIntoNumber(amount);
     const top = new operation.transfer_to_vest_operation();
@@ -214,8 +262,7 @@ class Wallet {
   async vestToCos(account: string, amount: string) {
     let value = util.parseIntoNumber(amount);
     if (value.leq(bigInt(constant.MinVestToConvert))) {
-      alert('convert must greater than 1 COS')
-      return
+      throw new Error('convert must greater than 1 COS')
     }
     const cop = new operation.convert_vest_operation();
     const fromAccount = new raw_type.account_name();
