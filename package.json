@@ -1,6 +1,6 @@
 {
   "name": "@coschain/cosjs",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "a js sdk to interact with coschain for human beings",
   "main": "./lib/index.js",
   "browser": "./dist/cosjs.js",
