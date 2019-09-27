@@ -1,6 +1,6 @@
 const Cos = require("../lib/index")
 
-let cos = new Cos("test", "https://testnode.contentos.io");
+let cos = new Cos("", "");
 
 
 (async () => {

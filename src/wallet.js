@@ -20,6 +20,20 @@ class Wallet {
     this.cos = cos
   }
 
+  generateKeysWithMonemonic(): [string, string, string] {
+    let mnemonic = crypto.generateMnemonic();
+    let [pubkey, privkey] = this.generateKeysFromMnemonic(mnemonic);
+    return [pubkey, privkey, mnemonic]
+  }
+
+  generateKeysFromMnemonic(words: string): [string, string] {
+    const result = crypto.generateKeyPairsFromMnemonic(words);
+    if (!result) {
+      throw new Error("Parse mnemonic failed");
+    }
+    return [result.publicKey, result.privateKey];
+  }
+
   addAccount(name: string, privateKey: string) {
     const priv = crypto.privKeyFromWIF(privateKey);
     if (priv === null) {
@@ -37,7 +51,7 @@ class Wallet {
         request: broadcastTrxRequest,
         host: this.cos.provider,
         onEnd: res => {
-          const { status, statusMessage, headers, message, trailers } = res
+          const {status, statusMessage, headers, message, trailers} = res;
           if (status === this.cos.grpc.Code.OK && message) {
             let obj = message.toObject();
             obj.invoice.trxId = trxId;
@@ -90,6 +104,7 @@ class Wallet {
   }
 
   async accountInfo(name: string, raw: ?boolean) {
+    raw = raw || false;
     let getAccountByNameRequest = new grpc.GetAccountByNameRequest();
     let accountName = new raw_type.account_name();
     accountName.setValue(name);
@@ -117,6 +132,7 @@ class Wallet {
   }
 
   async bpInfo(bp: string, raw: ?boolean) {
+    raw = raw || false;
     let getBpByNameRequest = new grpc.GetBlockProducerByNameRequest();
     let accountName = new raw_type.account_name();
     accountName.setValue(bp);
@@ -142,6 +158,7 @@ class Wallet {
   }
 
   async chainInfo(raw: ?boolean) {
+    raw = raw || false;
     const nonParamsRequest = new grpc.NonParamsRequest();
     return new Promise(resolve =>
       this.cos.grpc.unary(ApiService.GetChainState, {
@@ -165,6 +182,7 @@ class Wallet {
   }
 
   async blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse, raw: ?boolean) {
+    raw = raw || false;
     const blockProducerRequest = new grpc.GetBlockProducerListByVoteCountRequest;
     blockProducerRequest.setLimit(limit);
     blockProducerRequest.setStart(start);

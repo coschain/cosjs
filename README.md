@@ -86,6 +86,26 @@ let cos = new Cos("test", "https://testnode.contentos.io");
 })();
 ```
 
+### Example: generate a key-pair with a mnemonic
+
+```js
+const Cos = require('@coschain/cosjs');
+let cos = new Cos("", "");
+
+let [pubkey, privkey, mnemonic] = cos.wallet.generateKeysWithMonemonic();
+console.log(pubkey, privkey, mnemonic);
+```
+
+### Example: generate a key-pair from a mnemonic
+
+```js
+const Cos = require('@coschain/cosjs');
+let cos = new Cos("", "");
+
+let [pubkey, privkey] = cos.wallet.generateKeysFromMnemonic("foil confirm transfer resource use outer rack earth present lawsuit flock clay post unlock zoo muffin truck pretty across sibling wild next man fresh");
+console.log(pubkey, privkey);
+```
+
 ## About
 
 It is a wrapper for `cos-grpc-js`.
@@ -94,6 +114,8 @@ The module is designed for Node.js and browser.
 ## Wallet Apis
 
 * addAccount(name: string, privateKey: string)
+* generateKeysFromMnemonic(words: string): [string, string]
+* generateKeysWithMonemonic(): [string, string, string] 
 * accountInfo(name: string, raw: ?boolean) 
 * bpInfo(bp: string, raw: ?boolean)
 * chainInfo(raw: ?boolean) 
