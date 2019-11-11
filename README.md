@@ -11,7 +11,7 @@ npm i @coschain/cosjs --save
 ## In browser:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@coschain/cosjs@1.2.1/dist/cosjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@coschain/cosjs/dist/cosjs.min.js"></script>
 <script>
     let cos = new Cos("test", "https://testnode.contentos.io");
 
@@ -23,6 +23,24 @@ npm i @coschain/cosjs --save
 ```
 
 ## Usage
+
+### choose different environment
+
+#### for testnode
+
+```js
+const Cos = require('@coschain/cosjs');
+
+let cos = new Cos("test", "https://testnode.contentos.io");
+```
+
+#### for mainnode
+
+```js
+const Cos = require('@coschain/cosjs');
+
+let cos = new Cos("main", "https://mainnode.contentos.io");
+```
 
 ### Example: transfer
 
