@@ -12,10 +12,15 @@ export const generateUUID = (content) => {
 };
 
 export const parseIntoNumber = function (amount) {
+  if (typeof (amount) !== "string") {
+    throw new Error("Amount should be a string.")
+  }
   let [integer, decimal] = amount.split('.');
+  if (decimal.length !== 6) {
+    throw new Error("Precision must be 6-digit.");
+  }
   let value = bigInt(integer);
-  decimal = '0.' + decimal;
   value = value.multiply(bigInt(1000000));
-  value = value.add(bigInt(Number(decimal) * 1000000));
+  value = value.add(bigInt(decimal));
   return value
 };
