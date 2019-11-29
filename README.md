@@ -136,6 +136,7 @@ The module is designed for Node.js and browser.
 * generateKeysWithMonemonic(): [string, string, string] 
 * accountInfo(name: string, raw: ?boolean) 
 * bpInfo(bp: string, raw: ?boolean)
+* transactionInfo(trxId: string, raw: ?boolean)
 * chainInfo(raw: ?boolean) 
 * blockProducerList(start: raw_type.vest, limit: number, lastBlockProducer: grpc.BlockProducerResponse, raw: ?boolean) 
 * createAccount(creator: string, newAccount: string, pubkey: string)

@@ -157,6 +157,32 @@ class Wallet {
     )
   }
 
+  async transactionInfo(trx_id: string, raw: ?boolean) {
+    raw = raw || false;
+    let getTrxInfoByIdRequest = new grpc.GetTrxInfoByIdRequest();
+    let trxId = new raw_type.sha256();
+    trxId.setHexHash(trx_id);
+    getTrxInfoByIdRequest.setTrxId(trxId);
+    return new Promise(resolve =>
+      this.cos.grpc.unary(ApiService.GetTrxInfoById, {
+        request: getTrxInfoByIdRequest,
+        host: this.cos.provider,
+        onEnd: res => {
+          const {status, statusMessage, headers, message, trailers} = res;
+          if (status === this.cos.grpc.Code.OK && message) {
+            if (raw) {
+              resolve(message);
+            } else {
+              resolve(message.toObject());
+            }
+          } else {
+            resolve({msg: statusMessage});
+          }
+        }
+      })
+    )
+  }
+
   async chainInfo(raw: ?boolean) {
     raw = raw || false;
     const nonParamsRequest = new grpc.NonParamsRequest();
