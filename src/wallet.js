@@ -380,6 +380,34 @@ class Wallet {
     return this.broadcast(signTx)
   }
 
+  async reply(sender: string, parent_uuid: string, content: string) {
+    const rop = new operation.reply_operation();
+    const senderAccount = new raw_type.account_name();
+    senderAccount.setValue(sender);
+    rop.setUuid(util.generateUUID(sender + content));
+    rop.setOwner(senderAccount);
+    rop.setContent(content);
+    rop.setParentUuid(parent_uuid);
+    let beneficiary = new raw_type.beneficiary_route_type();
+    const dappAccount = new raw_type.account_name();
+    dappAccount.setValue(constant.DefaultBeneficiary);
+    beneficiary.setName(dappAccount);
+    beneficiary.setWeight(constant.Percent);
+    rop.addBeneficiaries(beneficiary);
+    const signTx = await this.signOps(sender, [rop]);
+    return this.broadcast(signTx)
+  }
+
+  async vote(voter: string, idx: string) {
+    const vop = new operation.vote_operation();
+    const voterAccount = new raw_type.account_name();
+    voterAccount.setValue(voter);
+    vop.setVoter(voterAccount);
+    vop.setIdx(idx);
+    const signTx = await this.signOps(voter, [vop]);
+    return this.broadcast(signTx)
+  }
+
   async contractCall(caller, owner, contract, method, args, payment) {
     const callOp = new operation.contract_apply_operation();
     const callerAccount = new raw_type.account_name();

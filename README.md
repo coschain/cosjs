@@ -146,6 +146,8 @@ The module is designed for Node.js and browser.
 * cosToStake(account: string, amount: string, toAccount: string)
 * stakeToCos(account: string, amount: string, toAccount: string)
 * post(sender: string, title: string, content: string, tagsStr: string)
+* reply(sender: string, parent_uuid: string, content: string)
+* vote(sender: string, idx: string)
 * contractCall(caller: string, owner: string, contract: string, method: string, args: string, payment: string)
 * voteToBlockProducer(voterValue: string, bpValue: string, cancel: boolean)
 * queryTable(owner: string, contract: string, table: string, field: string, begin: string, limit: number, reverse: boolean)
