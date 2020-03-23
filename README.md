@@ -151,3 +151,6 @@ The module is designed for Node.js and browser.
 * contractCall(caller: string, owner: string, contract: string, method: string, args: string, payment: string)
 * voteToBlockProducer(voterValue: string, bpValue: string, cancel: boolean)
 * queryTable(owner: string, contract: string, table: string, field: string, begin: string, limit: number, reverse: boolean)
+* delegateVest(sender: string, receiver: string, amount: string, expiration: number)
+* unDelegateVest(sender: string, orderId: number)
+* vestDelegationOrderList(account: string, limit: number, is_lender: boolean)

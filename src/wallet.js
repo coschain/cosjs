@@ -469,6 +469,59 @@ class Wallet {
       })
     )
   }
+
+  async delegateVest(sender: string, receiver: string, amount: string, expiration: number) {
+    let value = util.parseIntoNumber(amount);
+    const op = new operation.delegate_vest_operation();
+    const fromAccount = new raw_type.account_name();
+    fromAccount.setValue(sender);
+    op.setFrom(fromAccount);
+    const toAccount = new raw_type.account_name();
+    toAccount.setValue(receiver);
+    op.setTo(toAccount);
+    const delegateAmount = new raw_type.vest();
+    delegateAmount.setValue(value.toString());
+    op.setAmount(delegateAmount);
+    op.setExpiration(expiration);
+
+    const signTx = await this.signOps(sender, [op]);
+    return this.broadcast(signTx);
+  }
+
+  async unDelegateVest(sender: string, orderId: number) {
+    const op = new operation.un_delegate_vest_operation();
+    const accountName = new raw_type.account_name();
+    accountName.setValue(sender);
+    op.setAccount(accountName);
+    op.setOrderId(orderId);
+    const signTx = await this.signOps(sender, [op]);
+    return this.broadcast(signTx);
+  }
+
+  async vestDelegationOrderList(account: string, limit: number, is_lender: boolean) {
+    const accountName = new raw_type.account_name();
+    accountName.setValue(account);
+    let req = new grpc.GetVestDelegationOrderListRequest();
+    req.setAccount(accountName);
+    req.setIsFrom(is_lender);
+    req.setLimit(limit);
+    req.setLastOrderId(0);
+    return new Promise(resolve =>
+        this.cos.grpc.unary(ApiService.GetVestDelegationOrderList, {
+          request: req,
+          host: this.cos.provider,
+          onEnd: res => {
+            const {status, statusMessage, headers, message, trailers} = res;
+            if (status === this.cos.grpc.Code.OK && message) {
+              let object = message.toObject();
+              resolve(object);
+            } else {
+              resolve({msg: statusMessage});
+            }
+          }
+        })
+    )
+  }
 }
 
 export default Wallet;
